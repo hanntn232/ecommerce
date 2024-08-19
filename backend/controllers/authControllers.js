@@ -16,7 +16,7 @@ class authControllers {
                         role: admin.role
                     })
                     res.cookie('accessToken', token, { expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) })
-                    responseReturn(res, 200, { token, message: "Login success"})
+                    responseReturn(res, 200, { token, message: "Login success" })
                 } else {
                     responseReturn(res, 404, { error: "Password wrong" })
                 }
@@ -26,7 +26,20 @@ class authControllers {
         } catch (error) {
             responseReturn(res, 500, { error: error.message })
         }
-    }
+    } //End admin_login method
+    getUser = async (req, res) => {
+        const { id, role } = req;
+        try {
+            if (role === 'admin') {
+                const user = await adminModel.findById(id);
+                responseReturn(res, 200, { userInfo: user })
+            } else {
+                console.log('Seller Info')
+            }
+        } catch (error) {
+            console.log(error.message);
+        }
+    } // end getUser method
 }
 
 module.exports = new authControllers();
